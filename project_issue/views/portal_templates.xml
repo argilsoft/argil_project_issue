@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>    
+    
+  <template id="portal_my_home_menu_project_issue" name="Portal layout : project issue menu entries" inherit_id="portal.portal_layout" priority="55">
+    <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+      <li t-if="page_name == 'project_issue' or project_issue">
+        <a t-if="project_issue" t-attf-href="/my/project_issue?{{ keep_query() }}">Project Issues</a>
+        <t t-else="">Project Issues</t>
+      </li>
+      <li t-if="project_issue">
+        <t t-esc="project_issue.name"/>
+      </li>
+    </xpath>
+  </template>
+
+  <template id="portal_my_home_project_issue" name="Portal My Home : project issue entry" inherit_id="portal.portal_my_home" priority="55">
+    <xpath expr="//ul[hasclass('o_portal_docs')]" position="inside">
+        <li t-if="issue_count" class="list-group-item">
+          <span class="badge" t-esc="issue_count"/>
+          <a href="/my/project_issue">Project Issues</a>
+        </li>
+    </xpath>
+  </template>
+
+  <template id="portal_my_project_issues" name="Portal: My Project Issues">
+    <t t-call="portal.portal_layout">
+      <h3>Project Issues
+        <t t-call="portal.portal_searchbar"/>
+      </h3>
+      <div t-if="orders" class="panel panel-default">
+      <div class="table-responsive"><table class="table table-hover o_portal_my_doc_table">
+        <thead>
+          <tr class="active">
+            <th>Issue #</th>
+            <th style="text-align:left;">Name</th>
+            <th style="text-align:center;">Date Created</th>
+            <th style="text-align:center;">Date Opened</th>
+            <th style="text-align:center;">Date Closed</th>
+            <th style="text-align:center;">Priority</th>
+            <th style="text-align:center;">Assigned to</th>
+            <th style="text-align:center;">Stage</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <t t-foreach="orders" t-as="order">
+          <tr>
+            <td>
+              <a t-attf-href="/my/project_issue/#{order.id}?#{keep_query()}"><t t-esc="order.code"/></a>
+            </td>
+            <td style="text-align:left;"><span t-field="order.name"/></td>
+            <td style="text-align:center;"><span t-field="order.create_date"/></td>
+            <td style="text-align:center;"><span t-field="order.date_open"/></td>
+            <td style="text-align:center;"><span t-field="order.date_closed"/></td>
+            <td style="text-align:center;"><span t-field="order.priority"/></td>
+            <td style="text-align:center;"><span t-field="order.user_id"/></td>
+            <td style="text-align:center;"><span t-field="order.stage_id"/></td>
+            <td><span t-field="order.duration"/></td>
+          </tr>
+        </t>
+      </table></div>
+      <div t-if="pager" class="o_portal_pager text-center">
+        <t t-call="portal.pager"/>
+      </div>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_my_project_issue" name="Portal: My Project Issue">
+    <t t-call="portal.portal_layout">
+      <t t-set="project_issue" t-value="order"/>
+      <div id="optional_placeholder"></div>
+      <div class="container">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-md-12">
+                  <h4>
+                    <t t-call='portal.record_pager'/>
+                    Issue
+                    <span t-esc="order.code"/>
+                  </h4>
+                </div>
+              </div>
+              
+              <div class="row mt32 mb32">
+                <div class="col-xs-2">
+                  <strong>Create Date</strong>
+                  <p t-field="order.create_date" t-options='{"widget": "date"}'/>
+                </div>
+                <div class="col-xs-2">
+                  <strong>Assigned to</strong>
+                  <p t-field="order.user_id.name" />
+                </div>
+                <div class="col-xs-2">
+                  <strong>Date Open</strong>
+                  <p t-field="order.date_open" t-options='{"widget": "date"}'/>
+                </div>
+                <div class="col-xs-2">
+                  <strong>Date Closed</strong>
+                  <p t-field="order.date_closed" t-options='{"widget": "date"}'/>
+                </div>
+                <div class="col-xs-2">
+                  <strong>Stage</strong>
+                  <p t-field="order.stage_id.name" />
+                </div>
+                <div class="col-xs-2">
+                  <strong>Priority</strong>
+                  <p t-field="order.priority" />
+                </div>
+              </div>
+            </div>
+            <div class="panel-body">
+              <p>
+                <strong>Issue resume: </strong>  <span t-field="order.name" />
+              </p>
+              <p>
+                <strong>Description: </strong>  <span t-field="order.description" />
+              </p>
+              <div class="row mt32">
+                <div class="col-md-12">
+                    <h4><strong>Message and communication history</strong></h4>
+                </div>
+                <div class="col-md-10 col-md-offset-1 mt16">
+                    <t t-call="portal.message_thread">
+                        <t t-set="object" t-value="order"/>
+                    </t>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="oe_structure mb32"/>
+    </t>
+  </template>
+
+</odoo>
