@@ -83,7 +83,7 @@ class ProjectIssue(models.Model):
     def _compute_day(self):
         for issue in self:
             # if the working hours on the project are not defined, use default ones (8 -> 12 and 13 -> 17 * 5)
-            calendar = issue.project_id.resource_calendar_id
+            calendar = issue.project_id.resource_calendar_id or issue.company_id.resource_calendar_id
 
             dt_create_date = fields.Datetime.from_string(issue.create_date)
             if issue.date_open:
@@ -343,9 +343,13 @@ class ProjectIssue(models.Model):
             except Exception:
                 pass
         if self.project_id:
-            current_objects = filter(None, headers.get('X-Odoo-Objects', '').split(','))
-            current_objects.insert(0, 'project.project-%s, ' % self.project_id.id)
-            headers['X-Odoo-Objects'] = ','.join(current_objects)
+            if headers.get('X-Odoo-Objects', False) and headers.get('X-Odoo-Objects') and \
+                not 'project.project' in headers.get('X-Odoo-Objects'):
+                headers['X-Odoo-Objects'] = ('project.project-%s, ' % self.project_id.id) + headers.get('X-Odoo-Objects')
+            #current_objects = filter(None, headers.get('X-Odoo-Objects', '').split(','))
+            #print("current_objects: %s" % current_objects)
+            #current_objects.insert(0, 'project.project-%s, ' % self.project_id.id)
+            #headers['X-Odoo-Objects'] = ','.join(current_objects)
         if self.tag_ids:
             headers['X-Odoo-Tags'] = ','.join(self.tag_ids.mapped('name'))
         res['headers'] = repr(headers)
