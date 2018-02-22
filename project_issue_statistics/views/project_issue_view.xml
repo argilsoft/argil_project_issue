@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<odoo>
+    
+
+    <record id="project_issue_statistics_form_view" model="ir.ui.view">
+            <field name="name">project.issue.statistics.form.inherited</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue.project_issue_form_view" />
+            <field name="arch" type="xml">
+                <page name="extra_info" position="inside">
+                    <group>
+                        <group>
+                            <field name="create_date"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <separator string="Assignation" colspan="2" />
+                            <field name="date_open_std"/>
+                            <field name="date_open"/>
+                            <field name="hours_delayed_open" widget="float_time"/>
+                        </group>
+                        <group>
+                            <separator string="Closed" colspan="2" />
+                            <field name="date_close_std"/>
+                            <field name="date_closed"/>
+                            <field name="hours_delayed_close" widget="float_time"/>
+                        </group>
+                    </group>
+                </page>
+            </field>
+        </record>
+
+        <record id="project_issue_statistics_tree_view_inherited" model="ir.ui.view">
+            <field name="name">projet.issue.statistics.tree.inherited</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue.project_issue_tree_view" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="before">
+                    <field name="hours_delayed_open" sum="sum_hours_delayed_open" widget="float_time"/>
+                    <field name="hours_delayed_close" sum="sum_hours_delayed_close" widget="float_time"/>
+                </field>
+            </field>
+        </record>
+
+</odoo>

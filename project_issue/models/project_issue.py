@@ -192,10 +192,11 @@ class ProjectIssue(models.Model):
 
     def update_date_closed(self, stage_id):
         project_task_type = self.env['project.task.type'].browse(stage_id)
-        if project_task_type.fold:
+        if project_task_type.fold and project_task_type.mark_as_ended:
             return {'date_closed': fields.Datetime.now()}
         return {'date_closed': False}
 
+    
     def stage_find(self, project_id, domain=None, order='sequence'):
         """ Override of the base.stage method
             Parameter of the stage search taken from the issue:

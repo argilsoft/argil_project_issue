@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="1">
+        <record model="ir.config_parameter" id="argil_standard_between_creation_and_assigned_0_stars">
+            <field name="key">argil_standard_between_creation_and_assigned_0_stars</field> 
+            <field name="value">1</field>
+        </record>
+        <record model="ir.config_parameter" id="argil_standard_between_creation_and_assigned_1_stars">
+            <field name="key">argil_standard_between_creation_and_assigned_1_stars</field> 
+            <field name="value">1</field>
+        </record>
+        <record model="ir.config_parameter" id="argil_standard_between_creation_and_assigned_2_stars">
+            <field name="key">argil_standard_between_creation_and_assigned_2_stars</field> 
+            <field name="value">1</field>
+        </record>
+        <record model="ir.config_parameter" id="argil_standard_between_assigned_and_close_0_stars">
+            <field name="key">argil_standard_between_assigned_and_close_0_stars</field> 
+            <field name="value">60</field>
+        </record>
+        <record model="ir.config_parameter" id="argil_standard_between_assigned_and_close_1_stars">
+            <field name="key">argil_standard_between_assigned_and_close_1_stars</field> 
+            <field name="value">30</field>
+        </record>
+        <record model="ir.config_parameter" id="argil_standard_between_assigned_and_close_2_stars">
+            <field name="key">argil_standard_between_assigned_and_close_2_stars</field> 
+            <field name="value">10</field>
+        </record>
+        <record model="ir.config_parameter" id="argil_project_start_time_working_day">
+            <field name="key">argil_project_start_time_working_day</field> 
+            <field name="value">9</field>
+        </record>
+        <record model="ir.config_parameter" id="argil_project_end_time_working_day">
+            <field name="key">argil_project_end_time_working_day</field> 
+            <field name="value">19</field>
+        </record>
+        
+        
+    </data>
+    
+</odoo>
