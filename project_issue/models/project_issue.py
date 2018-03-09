@@ -4,6 +4,8 @@
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import AccessError
 from odoo.tools.safe_eval import safe_eval
+from datetime import datetime, timedelta
+from pytz import timezone
 
 
 class ProjectIssue(models.Model):
@@ -20,6 +22,41 @@ class ProjectIssue(models.Model):
             return False
         return self.stage_find(project_id, [('fold', '=', False)])
 
+    def get_number_days_inbetween(self, date1, date2):
+        if not (date1 and date2):
+            return 0        
+        d1 = datetime.strptime(date1, '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone('UTC'))
+        d2 = datetime.strptime(date2, '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone('UTC'))
+        return (d2-d1).days
+        
+    @api.multi
+    @api.depends('create_date', 'date_open', 'date_qa', 'date_customer_testing', 'date_closed')
+    def _compute_duration(self):
+        for issue in self:
+            issue.duration_create_open   = issue.get_number_days_inbetween(issue.create_date, issue.date_open)
+            issue.duration_open_qa       = issue.get_number_days_inbetween(issue.date_open, issue.date_qa)
+            issue.duration_qa_customer_testing = issue.get_number_days_inbetween(issue.date_qa, issue.date_customer_testing)
+            issue.duration_customer_testing_close = issue.get_number_days_inbetween(issue.date_customer_testing, issue.date_closed)
+            issue.duration_create_close = issue.get_number_days_inbetween(issue.create_date, issue.date_closed)
+    
+    
+    
+    duration_create_open = fields.Integer(string="Days bw Creation & Assigned", 
+                                          help="Days between Creation and Assigned", 
+                                          compute="_compute_duration", store=True)
+    duration_open_qa = fields.Integer(string="Days bw Assigned & QA)", 
+                                      help="Days between Assigned and Quality Assurance", 
+                                          compute="_compute_duration", store=True)
+    duration_qa_customer_testing = fields.Integer(string="Days bw QA & Customer Test", 
+                                                    help="Days between Quality Assurance and Customer Testing", 
+                                                    compute="_compute_duration", store=True)
+    duration_customer_testing_close = fields.Integer(string="Days bw Customer Test & Close", 
+                                                      help="Days between Customer Testing and Close", 
+                                                      compute="_compute_duration", store=True)
+    duration_create_close = fields.Integer(string="Days bw Creation &/Assigned", 
+                                             help="Days between Creation and Assigned", 
+                                             compute="_compute_duration", store=True)
+    
     code = fields.Char(string='Issue Reference', required=True, copy=False, readonly=True, index=True, default=lambda self: _('New'))
     name = fields.Char(string='Issue', required=True)
     active = fields.Boolean(default=True)
@@ -39,7 +76,10 @@ class ProjectIssue(models.Model):
     email_cc = fields.Char(string='Watchers Emails', help="""These email addresses will be added to the CC field of all inbound
         and outbound emails for this record before being sent. Separate multiple email addresses with a comma""")
     date_open = fields.Datetime(string='Assigned', readonly=True, index=True)
-    date_closed = fields.Datetime(string='Closed', readonly=True, index=True)
+    date_qa = fields.Datetime(string='Date QA', readonly=True, index=True)
+    date_customer_testing = fields.Datetime(string='Date Customer Testing', readonly=True, index=True)
+    date_closed = fields.Datetime(string='Date Closed', readonly=True, index=True)
+
     date = fields.Datetime('Date')
     date_last_stage_update = fields.Datetime(string='Last Stage Update', index=True, default=fields.Datetime.now)
     channel = fields.Char(string='Channel', help="Communication channel.")  # TDE note: is it still used somewhere ?
@@ -159,7 +199,7 @@ class ProjectIssue(models.Model):
         if vals.get('user_id') and not vals.get('date_open'):
             vals['date_open'] = fields.Datetime.now()
         if 'stage_id' in vals:
-            vals.update(self.update_date_closed(vals['stage_id']))
+            vals.update(self.update_dates(vals['stage_id']))
 
         # context: no_log, because subtype already handle this
         context['mail_create_nolog'] = True
@@ -169,7 +209,7 @@ class ProjectIssue(models.Model):
     def write(self, vals):
         # stage change: update date_last_stage_update
         if 'stage_id' in vals:
-            vals.update(self.update_date_closed(vals['stage_id']))
+            vals.update(self.update_dates(vals['stage_id']))
             vals['date_last_stage_update'] = fields.Datetime.now()
             if 'kanban_state' not in vals:
                 vals['kanban_state'] = 'normal'
@@ -189,13 +229,23 @@ class ProjectIssue(models.Model):
     # -------------------------------------------------------
     # Stage management
     # -------------------------------------------------------
-
-    def update_date_closed(self, stage_id):
+    def update_dates(self, stage_id):
         project_task_type = self.env['project.task.type'].browse(stage_id)
         #if project_task_type.fold and project_task_type.mark_as_ended:
+        values = {'date_closed': self.date_closed}
+        if project_task_type.mark_as_internal_testing:
+            values.update({'date_qa': fields.Datetime.now()})
+        if project_task_type.mark_as_customer_testing:
+            values.update({'date_customer_testing': fields.Datetime.now()})
+            if not self.date_qa:
+                values.update({'date_qa': fields.Datetime.now()})
         if project_task_type.mark_as_ended:
-            return {'date_closed': fields.Datetime.now()}
-        return {'date_closed': False}
+            values.update({'date_closed': fields.Datetime.now()})
+            if not self.date_qa:
+                values.update({'date_qa': fields.Datetime.now()})
+            if not self.date_customer_testing:
+                values.update({'date_customer_testing': fields.Datetime.now()})
+        return values
 
     
     def stage_find(self, project_id, domain=None, order='sequence'):

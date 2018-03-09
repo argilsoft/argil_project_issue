@@ -30,6 +30,7 @@ It allows the manager to quickly check the issues, assign them and decide on the
         'views/res_partner_views.xml',
         'views/portal_templates.xml',
         'views/project_task_type_view.xml',
+        'views/project_task_view.xml',
     ],
     'demo': [],
     'application': True,

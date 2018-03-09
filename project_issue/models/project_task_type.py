@@ -12,6 +12,12 @@ class ProjectStage(models.Model):
         domain = super(ProjectStage, self)._get_mail_template_id_domain()
         return ['|'] + domain + [('model', '=', 'project.issue')]
     
-
-    mark_as_ended = fields.Boolean(string='Mark as Ended',
-        help='This stage is used for calculating Tasks & Issues Statistics.')
+    
+    mark_as_internal_testing = fields.Boolean(string='Internal QA',
+        help='This stage is used for calculating Issues Statistics.')
+    
+    mark_as_customer_testing = fields.Boolean(string='Customer Testing',
+        help='This stage is used for calculating Issues Statistics.')
+    
+    mark_as_ended = fields.Boolean(string='Set as Done',
+        help='This stage is used for calculating Project Tasks & Issues Statistics.')

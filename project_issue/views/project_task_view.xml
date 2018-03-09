@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<odoo>
+        
+        <record id="project_task_form_extra_times" model="ir.ui.view">
+            <field name="name">project.task.form.extra_times</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='extra_info']" position="inside">
+                    <group>
+                        <group>
+                            <field name="create_date" readonly="1"/>
+                            <field name="date_assign"/>
+                            <field name="date_qa"/>
+                            <field name="date_customer_testing"/>
+                            <field name="date_closed"/>
+                        </group>
+                        <group>
+                            <field name="duration_create_open"/>
+                            <field name="duration_open_qa"/>
+                            <field name="duration_qa_customer_testing"/>
+                            <field name="duration_customer_testing_close"/>
+                            <field name="duration_create_close"/>
+                        </group>                        
+                    </group>
+                </xpath>
+                <field name="date_assign" position="replace"/>
+            </field>
+        </record>
+        
+</odoo>

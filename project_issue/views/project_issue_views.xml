@@ -42,6 +42,22 @@
                         <page string="Extra Info" name="extra_info" groups="project.group_project_manager,project.group_project_user">
                             <group>
                                 <group>
+                                    <field name="create_date" readonly="1"/>
+                                    <field name="date_open"/>
+                                    <field name="date_qa"/>
+                                    <field name="date_customer_testing"/>
+                                    <field name="date_closed"/>
+                                </group>
+                                <group>
+                                    <field name="duration_create_open"/>
+                                    <field name="duration_open_qa"/>
+                                    <field name="duration_qa_customer_testing"/>
+                                    <field name="duration_customer_testing_close"/>
+                                    <field name="duration_create_close"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group>
                                     <field name="id" groups="base.group_no_one"/>
                                     <field name="day_open"/>
                                     <field name="day_close"/>

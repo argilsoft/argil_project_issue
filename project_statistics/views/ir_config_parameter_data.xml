@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="0">
+        <record model="ir.config_parameter" id="standard_between_creation_and_assigned_0_stars">
+            <field name="key">standard_between_creation_and_assigned_0_stars</field> 
+            <field name="value">1</field>
+        </record>
+        <record model="ir.config_parameter" id="standard_between_creation_and_assigned_1_stars">
+            <field name="key">standard_between_creation_and_assigned_1_stars</field> 
+            <field name="value">1</field>
+        </record>
+        <record model="ir.config_parameter" id="standard_between_creation_and_assigned_2_stars">
+            <field name="key">standard_between_creation_and_assigned_2_stars</field> 
+            <field name="value">1</field>
+        </record>
+        <record model="ir.config_parameter" id="standard_between_assigned_and_close_0_stars">
+            <field name="key">standard_between_assigned_and_close_0_stars</field> 
+            <field name="value">60</field>
+        </record>
+        <record model="ir.config_parameter" id="standard_between_assigned_and_close_1_stars">
+            <field name="key">standard_between_assigned_and_close_1_stars</field> 
+            <field name="value">30</field>
+        </record>
+        <record model="ir.config_parameter" id="standard_between_assigned_and_close_2_stars">
+            <field name="key">standard_between_assigned_and_close_2_stars</field> 
+            <field name="value">10</field>
+        </record>
+        <record model="ir.config_parameter" id="project_start_time_working_day">
+            <field name="key">project_start_time_working_day</field> 
+            <field name="value">9</field>
+        </record>
+        <record model="ir.config_parameter" id="project_end_time_working_day">
+            <field name="key">project_end_time_working_day</field> 
+            <field name="value">19</field>
+        </record>
+        <record model="ir.config_parameter" id="days_for_qa_before_deadline_4_tasks">
+            <field name="key">days_for_qa_before_deadline_4_tasks</field> 
+            <field name="value">2</field>
+        </record>
+        <record model="ir.config_parameter" id="days_for_customer_testing_before_deadline_4_tasks">
+            <field name="key">days_for_customer_testing_before_deadline_4_tasks</field> 
+            <field name="value">0</field>
+        </record>
+        
+    </data>
+    
+</odoo>

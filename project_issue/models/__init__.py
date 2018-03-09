@@ -6,4 +6,5 @@ from . import account_analytic_account
 from . import project_project
 from . import project_task_type
 from . import res_partner
+from . import project_task
 #from . import project_issue_config_settings
