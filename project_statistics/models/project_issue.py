@@ -2,10 +2,11 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import api, fields, models
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from datetime import datetime, timedelta
 from dateutil.parser import parse
 from pytz import timezone
-    
+import time
     
 class ProjectIssue(models.Model):
     _inherit = 'project.issue'
@@ -63,9 +64,9 @@ class ProjectIssue(models.Model):
         std_open = int(self.env['ir.config_parameter'].get_param('standard_between_creation_and_assigned_%s_stars' % priority)) or 0
         std_close = int(self.env['ir.config_parameter'].get_param('standard_between_assigned_and_close_%s_stars' % priority)) or 0
         
-        self.date_open_std = self.compute_next_datetime(self.create_date, std_open)
+        self.date_open_std = self.compute_next_datetime(self.create_date or time.strftime(DEFAULT_SERVER_DATETIME_FORMAT), std_open)
         self.date_close_std = self.compute_next_datetime(self.date_open_std, std_close)
-        create_date = datetime.strptime(self.create_date, '%Y-%m-%d %H:%M:%S')
+        create_date = datetime.strptime(self.create_date or time.strftime(DEFAULT_SERVER_DATETIME_FORMAT), '%Y-%m-%d %H:%M:%S')
         date_open = self.date_open and datetime.strptime(self.date_open, '%Y-%m-%d %H:%M:%S') or False
         date_open_std = datetime.strptime(self.date_open_std, '%Y-%m-%d %H:%M:%S')
         date_close_std = datetime.strptime(self.date_close_std, '%Y-%m-%d %H:%M:%S')
