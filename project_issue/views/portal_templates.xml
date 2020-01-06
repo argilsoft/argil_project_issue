@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>    
-    
+    <!--
   <template id="portal_my_home_menu_project_issue" name="Portal layout : project issue menu entries" inherit_id="portal.portal_layout" priority="55">
     <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
       <li t-if="page_name == 'project_issue' or project_issue">
@@ -131,6 +131,6 @@
       </div>
       <div class="oe_structure mb32"/>
     </t>
-  </template>
+  </template>-->
 
 </odoo>
