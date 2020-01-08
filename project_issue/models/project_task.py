@@ -11,8 +11,8 @@ class ProjectTask(models.Model):
     def get_number_days_inbetween(self, date1, date2):
         if not (date1 and date2):
             return 0        
-        d1 = datetime.strptime(date1, '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone('UTC'))
-        d2 = datetime.strptime(date2, '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone('UTC'))
+        d1 = date1.replace(tzinfo=timezone('UTC'))
+        d2 = date2.replace(tzinfo=timezone('UTC'))
         return (d2-d1).days
     
     

@@ -15,7 +15,8 @@ class ProjectIssue(models.Model):
         hour_start  = int(self.env['ir.config_parameter'].get_param('project_start_time_working_day')) or 9
         hour_end    = int(self.env['ir.config_parameter'].get_param('project_end_time_working_day')) or 19
         working_hours = hour_end - hour_start
-        date_obj = datetime.strptime(xdate, '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone('UTC'))
+        #date_obj = datetime.strptime(xdate, '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone('UTC'))
+        date_obj = xdate.replace(tzinfo=timezone('UTC'))
         dt_value = date_obj.astimezone(timezone(self.env.user.partner_id.tz or 'UTC'))
                 
         days_factor = hours / working_hours # dias requeridos para calcular
@@ -66,11 +67,11 @@ class ProjectIssue(models.Model):
         
         self.date_open_std = self.compute_next_datetime(self.create_date or time.strftime(DEFAULT_SERVER_DATETIME_FORMAT), std_open)
         self.date_close_std = self.compute_next_datetime(self.date_open_std, std_close)
-        create_date = datetime.strptime(self.create_date or time.strftime(DEFAULT_SERVER_DATETIME_FORMAT), '%Y-%m-%d %H:%M:%S')
-        date_open = self.date_open and datetime.strptime(self.date_open, '%Y-%m-%d %H:%M:%S') or False
-        date_open_std = datetime.strptime(self.date_open_std, '%Y-%m-%d %H:%M:%S')
-        date_close_std = datetime.strptime(self.date_close_std, '%Y-%m-%d %H:%M:%S')
-        date_closed = self.date_closed and datetime.strptime(self.date_closed, '%Y-%m-%d %H:%M:%S') or False
+        create_date = self.create_date or time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        date_open = self.date_open or False
+        date_open_std = self.date_open_std
+        date_close_std = self.date_close_std
+        date_closed = self.date_closed or False
         
         self.hours_delayed_open = 0
         if date_open and date_open_std:

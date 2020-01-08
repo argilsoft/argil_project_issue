@@ -11,19 +11,17 @@ class ProjectTask(models.Model):
     _inherit = 'project.task'
             
     def compute_next_datetime(self, xdate, days):
+        """
         hour_start  = int(self.env['ir.config_parameter'].get_param('project_start_time_working_day')) or 9
         hour_end    = int(self.env['ir.config_parameter'].get_param('project_end_time_working_day')) or 19
         working_hours = hour_end - hour_start
-
-        
-        dt_value = date(int(xdate[:4]),int(xdate[5:][:2]),int(xdate[-2:]))
-        dt_value = dt_value - timedelta(days=days)
+        """
+        dt_value = xdate - timedelta(days=days)
 
         if dt_value.weekday() in (5,6): # Se reporto en Fin de semana (Sabado / Domingo)
             dt_value = dt_value + timedelta(days=dt_value.weekday() == 5 and -1 or -2)            
 
-        
-        return dt_value.strftime("%Y-%m-%d")
+        return dt_value #.strftime("%Y-%m-%d")
         
     @api.multi
     @api.depends('date_deadline', 'date_qa', 'date_customer_testing')
@@ -39,20 +37,10 @@ class ProjectTask(models.Model):
             rec.date_qa_std = rec.compute_next_datetime(rec.date_deadline, std_qa)
             rec.date_customer_testing_std = rec.compute_next_datetime(rec.date_deadline, std_close)
 
-            date_qa = rec.date_qa and date(int(rec.date_qa[:4]),
-                                           int(rec.date_qa[5:][:2]),
-                                           int(rec.date_qa[8:][:2])) or False
-            date_qa_std = rec.date_qa_std and date(int(rec.date_qa_std[:4]),
-                                                   int(rec.date_qa_std[5:][:2]),
-                                                   int(rec.date_qa_std[8:][:2])) or False
-            date_customer_testing = rec.date_customer_testing and \
-                                        date(int(rec.date_customer_testing[:4]),
-                                             int(rec.date_customer_testing[5:][:2]),
-                                             int(rec.date_customer_testing[8:][:2])) or False
-            date_customer_testing_std = rec.date_customer_testing_std and \
-                                            date(int(rec.date_customer_testing_std[:4]),
-                                                 int(rec.date_customer_testing_std[5:][:2]),
-                                                 int(rec.date_customer_testing_std[8:][:2])) or False
+            date_qa = rec.date_qa.date()
+            date_qa_std = rec.date_qa_std
+            date_customer_testing = rec.date_customer_testing
+            date_customer_testing_std = rec.date_customer_testing_std
 
         
             if date_qa and date_qa_std:

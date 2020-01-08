@@ -25,8 +25,8 @@ class ProjectIssue(models.Model):
     def get_number_days_inbetween(self, date1, date2):
         if not (date1 and date2):
             return 0        
-        d1 = datetime.strptime(date1, '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone('UTC'))
-        d2 = datetime.strptime(date2, '%Y-%m-%d %H:%M:%S').replace(tzinfo=timezone('UTC'))
+        d1 = date1.replace(tzinfo=timezone('UTC'))
+        d2 = date2.replace(tzinfo=timezone('UTC'))
         return (d2-d1).days
         
     @api.multi
@@ -129,8 +129,9 @@ class ProjectIssue(models.Model):
             if issue.date_open:
                 dt_date_open = fields.Datetime.from_string(issue.date_open)
                 issue.day_open = (dt_date_open - dt_create_date).total_seconds() / (24.0 * 3600)
-                issue.working_hours_open = calendar.get_work_hours_count(dt_create_date, dt_date_open, False,
+                issue.working_hours_open = calendar.get_work_hours_count(dt_create_date, dt_date_open, #False,
                     compute_leaves=True) #, resource_id=False, default_interval=(8, 16))
+                print("issue.working_hours_open: %s" % issue.working_hours_open)
 
             if issue.date_closed:
                 dt_date_closed = fields.Datetime.from_string(issue.date_closed)
