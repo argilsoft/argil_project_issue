@@ -37,7 +37,7 @@ class ProjectTask(models.Model):
             rec.date_qa_std = rec.compute_next_datetime(rec.date_deadline, std_qa)
             rec.date_customer_testing_std = rec.compute_next_datetime(rec.date_deadline, std_close)
 
-            date_qa = rec.date_qa.date()
+            date_qa = rec.date_qa and rec.date_qa.date() or False
             date_qa_std = rec.date_qa_std
             date_customer_testing = rec.date_customer_testing
             date_customer_testing_std = rec.date_customer_testing_std
