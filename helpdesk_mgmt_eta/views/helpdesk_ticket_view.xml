@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        
+        <record id="ticket_view_tree_eta" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.view.tree.eta</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_tree"/>
+            <field name="arch" type="xml">
+                <field name="last_stage_update" position="before">
+                    <field name="date_expected" />
+                </field>
+            </field>
+        </record>
+        
+        <record id="ticket_view_form_eta" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.view.form.eta</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form"/>
+            <field name="arch" type="xml">
+                <field name="create_date" position="after">
+                    <field name="date_expected" />
+                </field>
+            </field>
+        </record>
+        
+        <template id="portal_my_tickets_eta" 
+                  name="Portal - tickets eta" 
+                  inherit_id="helpdesk_mgmt.portal_my_tickets" 
+                  priority="40">
+            <xpath expr="//div/div/table/thead/tr/th[6]" position="after">
+                <th>Fecha Estimada</th>
+            </xpath>
+            <xpath expr="//div/div/table/t/tr/td[6]" position="after">
+                <td>
+                    <span t-field="ticket.date_expected"/>
+                </td>
+            </xpath>
+        </template>
+        
+    </data>
+</odoo>
