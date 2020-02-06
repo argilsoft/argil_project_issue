@@ -64,7 +64,7 @@
             
             <xpath expr="//div[hasclass('panel-body')]/div[hasclass('mb8')]" position="after">
                 <br/>
-                <h4 class="page-header">Description</h4>
+                <h4 class="page-header">Descripción</h4>
                 <t t-raw="ticket.description"/><br/><br/>
             </xpath>
         </template>
