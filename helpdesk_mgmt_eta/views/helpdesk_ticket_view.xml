@@ -50,5 +50,18 @@
             </xpath>
         </template>
         
+        <template id="portal_helpdesk_ticket_page_eta" 
+                  name="Ticket Portal Template eta" 
+                  inherit_id="helpdesk_mgmt.portal_helpdesk_ticket_page" 
+                  priority="40">
+            <xpath expr="//h4" position="replace">
+                <h4>
+                    <t t-call='portal.record_pager'/>
+                    <br/>
+                    <span t-field="ticket.number"/> - <span t-field="ticket.name"/>
+                </h4>
+            </xpath>
+        </template>
+        
     </data>
 </odoo>
