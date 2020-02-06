@@ -20,6 +20,7 @@
             <field name="arch" type="xml">
                 <field name="channel_id" position="after">
                     <field name="date_expected" />
+                    <field name="commercial_partner_id" />
                 </field>
             </field>
         </record>
@@ -28,8 +29,19 @@
                   name="Portal - tickets eta" 
                   inherit_id="helpdesk_mgmt.portal_my_tickets" 
                   priority="40">
+            <xpath expr="//div/div/table/thead/tr/th[1]" position="before">
+                <th>Referencia</th>
+            </xpath>
             <xpath expr="//div/div/table/thead/tr/th[6]" position="after">
                 <th>Fecha Estimada</th>
+            </xpath>
+
+            <xpath expr="//div/div/table/t/tr/td[1]" position="before">
+                <td>
+                    <a t-attf-href="/my/ticket/#{ticket.id}">
+                        <t t-esc="ticket.number"/>
+                    </a>
+                </td>
             </xpath>
             <xpath expr="//div/div/table/t/tr/td[6]" position="after">
                 <td>
