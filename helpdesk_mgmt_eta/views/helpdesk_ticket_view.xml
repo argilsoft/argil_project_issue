@@ -54,12 +54,18 @@
                   name="Ticket Portal Template eta" 
                   inherit_id="helpdesk_mgmt.portal_helpdesk_ticket_page" 
                   priority="40">
-            <xpath expr="//h4" position="replace">
-                <h4>
-                    <t t-call='portal.record_pager'/>
-                    <br/>
-                    <span t-field="ticket.number"/> - <span t-field="ticket.name"/>
-                </h4>
+            <span t-field="ticket.name" position="before">
+                <br /><span t-field="ticket.number"/> - 
+            </span>
+            
+            <xpath expr="//div[hasclass('panel-body')]/div/h4[hasclass('page-header')]" position="replace" />
+            <t t-raw="ticket.description" position="replace"/>
+            <xpath expr="//div[hasclass('panel-body')]/div/br[3]" position="replace" />
+            
+            <xpath expr="//div[hasclass('panel-body')]/div[hasclass('mb8')]" position="after">
+                <br/>
+                <h4 class="page-header">Description</h4>
+                <t t-raw="ticket.description"/><br/><br/>
             </xpath>
         </template>
         
